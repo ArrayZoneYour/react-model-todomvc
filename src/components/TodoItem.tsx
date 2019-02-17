@@ -10,7 +10,7 @@ const TodoItem = (props: Todo & any) => {
   const [state, actions] = useStore('Todo', [
     // The actions will always invoke the component which contain it.
     // So, depActions only prevent the update from other parallel components' actions
-    // The empty array here means all actions(clearCompleted, allDone, allUndo, done, undo, setFilter, destroy ...) from Other components' function won't invoke this TodoItem's setState.
+    // The empty array here means all actions(clearCompleted, allDone, allUndo, done, undo, setFilter, destroy ...) from Other components won't invoke this TodoItem's setState.
     // 'clearCompleted',
     // 'allDone',
     // 'allUndo'
