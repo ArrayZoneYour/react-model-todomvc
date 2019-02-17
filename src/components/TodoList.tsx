@@ -1,29 +1,36 @@
-import * as React from "react";
-import { useState } from "react";
-import { useStore } from "../models/index";
-import TodoItem from "./TodoItem.tsx";
+import * as React from 'react'
+import { useStore } from '../models/index'
+import TodoItem from './TodoItem'
 
 const TodoList = () => {
-  const [state] = useStore("Todo");
+  const [state] = useStore('Todo', [
+    'add',
+    'allDone',
+    'allUndo',
+    'clearCompleted',
+    'setFilter',
+    // 'destroy',
+    'done',
+    'undo'
+  ])
   return (
     <ul className="todo-list">
-      {state.todos
+      {Object.keys(state.todos)
         .filter(
-          todo =>
-            state.filter === "All" ||
-            (state.filter === "Active" && !todo.completed) ||
-            (state.filter === "Completed" && todo.completed)
+          key =>
+            state.filter === 'All' ||
+            (state.filter === 'Active' && !state.todos[+key].completed) ||
+            (state.filter === 'Completed' && state.todos[+key].completed)
         )
-        .map(todo => (
+        .map(key => (
           <TodoItem
-            key={todo.id}
-            id={todo.id}
-            title={todo.title}
-            completed={todo.completed}
+            key={key}
+            id={key}
+            completed={state.todos[+key].completed}
           />
         ))}
     </ul>
-  );
-};
+  )
+}
 
-export default TodoList;
+export default TodoList

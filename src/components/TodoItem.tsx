@@ -1,50 +1,75 @@
-import * as React from "react";
-import { useState } from "react";
-import { useStore } from "../models/index";
+import * as React from 'react'
+import { useState, useMemo } from 'react'
+import { useStore } from '../models/index'
 
 interface Todo {
-  completed: boolean;
-  title: string;
-  id: number;
+  id: number
 }
 
-const TodoItem = (props: Todo) => {
-  const [, actions] = useStore("Todo");
-  const [editing, setEditing] = useState(false);
-  const status = editing ? "editing" : props.completed ? "completed" : "";
-  const [title, setTitle] = useState(props.title);
+const TodoItem = (props: Todo & any) => {
+  const [state, actions] = useStore('Todo', [
+    // 'clearCompleted',
+    // 'allDone',
+    // 'allUndo'
+    // 'done',
+    // 'undo',
+    // 'setFilter'
+    // 'destroy'
+  ])
+  const [editing, setEditing] = useState(false)
+  const status = editing
+    ? 'editing'
+    : (state.todos[props.id] || {}).completed
+    ? 'completed'
+    : ''
+  const [title, setTitle] = useState((state.todos[props.id] || {}).title)
+  if (
+    state.todos[props.id].deleted ||
+    !(
+      state.filter === 'All' ||
+      (state.filter === 'Active' && !state.todos[props.id].completed) ||
+      (state.filter === 'Completed' && state.todos[props.id].completed)
+    )
+  ) {
+    return null
+  }
 
   const doubleClickHandler = () => {
-    setEditing(true);
-  };
-  const inputHandler = e => {
-    setTitle(e.target.value);
-  };
-  const submit = e => {
+    setEditing(true)
+  }
+  const inputHandler = (e: any) => {
+    setTitle(e.target.value)
+  }
+  const submit = (e: any) => {
     if (e.which === 13) {
-      setEditing(false);
-      actions.edit({ id: props.id, title: e.target.value });
+      setEditing(false)
+      actions.edit({ id: props.id, title: e.target.value })
     }
-  };
+  }
   const done = () => {
-    actions.done(props.id);
-  };
+    actions.done(props.id)
+  }
   const undo = () => {
-    actions.undo(props.id);
-  };
+    actions.undo(props.id)
+  }
+  const destroy = () => {
+    actions.destroy(props.id)
+  }
 
-  return (
+  return state.todos[props.id] ? (
     <li className={status}>
       <div className="view">
         <input
-          onClick={props.completed ? undo : done}
+          onClick={state.todos[props.id].completed ? undo : done}
           className="toggle"
           readOnly
           type="checkbox"
-          checked={props.completed}
+          checked={state.todos[props.id].completed}
         />
-        <label onDoubleClick={doubleClickHandler}>{props.title}</label>
-        <button className="destroy" />
+        <label onDoubleClick={doubleClickHandler}>
+          {state.todos[props.id].title}
+        </label>
+        <button className="destroy" onClick={destroy} />
       </div>
       <input
         className="edit"
@@ -53,7 +78,7 @@ const TodoItem = (props: Todo) => {
         onKeyDown={submit}
       />
     </li>
-  );
-};
+  ) : null
+}
 
-export default TodoItem;
+export default React.memo(TodoItem)

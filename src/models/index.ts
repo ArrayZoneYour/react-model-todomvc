@@ -1,4 +1,4 @@
-import { Model } from "react-model";
-import Todo from "./todo";
+import { Model } from '../react-model'
+import Todo from './todo'
 
-export const { useStore } = Model({ Todo });
+export const { useStore, getState } = Model({ Todo })

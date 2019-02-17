@@ -1,14 +1,14 @@
-import * as React from "react";
-import { useStore } from "../models/index";
+import * as React from 'react'
+import { useStore } from '../models/index'
 
 const TodoMaker = () => {
-  const [, actions] = useStore("Todo");
-  const submit = e => {
+  const [, actions] = useStore('Todo', [])
+  const submit = (e: any) => {
     if (e.which === 13) {
-      actions.add(e.target.value);
-      e.target.value = "";
+      actions.add(e.target.value)
+      e.target.value = ''
     }
-  };
+  }
   return (
     <input
       className="new-todo"
@@ -16,7 +16,7 @@ const TodoMaker = () => {
       onKeyDown={submit}
       autoFocus
     />
-  );
-};
+  )
+}
 
-export default TodoMaker;
+export default TodoMaker
