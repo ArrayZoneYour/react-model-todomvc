@@ -1,0 +1,22 @@
+# Next.js
+.next/
+node_modules/
+
+# Parcel
+.cache/
+
+# package
+*.tgz
+
+# VSCode
+.vscode/
+
+# Compile
+dist/
+
+# build
+build/
+
+# yarn
+yarn.lock
+package-lock.json
